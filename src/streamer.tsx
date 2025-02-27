@@ -3,6 +3,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 
+// For bar and pie charts
+import { Chart } from "chart.js/auto";
+// For word clouds
+import { WordCloud } from "wordcloud/src/wordcloud2.js";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <p>Streamer</p>
