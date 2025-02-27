@@ -1,14 +1,15 @@
-<!-- For the viewer; answering quesstions, seeing ranking, or viewing escape room progress -->
+<!-- Build streamer view -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ title }}</title>
-    <script src="jquery.js"></script>
+    <title>McCutcheon Mayhem</title>
     <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
   </head>
   <body>
-    {{> content }}
+    <div id="root"></div>
+    <script type="module" src="/src/streamer.tsx"></script>
   </body>
 </html>

@@ -18,4 +18,20 @@
 ## LOCAL TESTING
 
 - https://dev.twitch.tv/docs/extensions/life-cycle/
--
+
+## GUIDELINES
+
+- Third party libraries need to be bundled independently
+- Careful w/ Create-react-app; no code obfuscation allowed!
+
+## SUBMITTING YOUR EXTENSION
+
+- You must have a test channel running with your extension
+
+## TODO
+
+- [] Remember how to use vite/react
+- [] Goal is to get the basic vite extension hosted BY THE END of hall club meeting; I'll watch a tutorial
+- [] Thir
+
+http://localhost:8000/ for testing
