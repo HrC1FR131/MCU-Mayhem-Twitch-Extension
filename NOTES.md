@@ -28,10 +28,6 @@
 
 - You must have a test channel running with your extension
 
-## TODO
+## NEXT JS & REACT
 
-- [] Remember how to use vite/react
-- [] Goal is to get the basic vite extension hosted BY THE END of hall club meeting; I'll watch a tutorial
-- [] Thir
-
-http://localhost:8000/ for testing
+- Next js

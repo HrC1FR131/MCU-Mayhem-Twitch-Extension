@@ -2,14 +2,25 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-
-// For bar and pie charts
-import { Chart } from "chart.js/auto";
-// For word clouds
-import { WordCloud } from "wordcloud/src/wordcloud2.js";
+// Streamer side has routing
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import StreamerQuestions from "./components/streamer_questions";
+import StreamerResponses from "./components/streamer_responses";
+import StreamerLeaderboard from "./components/streamer_leaderboard";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <p>Streamer</p>
+    <Router>
+      <nav>
+        <Link to="/">Questions</Link> | <Link to="/responses">Responses</Link> |{" "}
+        <Link to="/leaderboard">Leaderboard</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<StreamerQuestions />} />
+        <Route path="/responses" element={<StreamerResponses />} />
+        <Route path="/leaderboard" element={<StreamerLeaderboard />} />
+      </Routes>
+    </Router>
   </StrictMode>
 );
