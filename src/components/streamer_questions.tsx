@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import Timer from "./timer";
 import { createRoot } from "react-dom/client";
+import { BACKEND } from "../utils.tsx";
 
-const socket = io("https://xanmankey.vulcan.moe"); // Connect to backend WebSocket
+const socket = io(BACKEND); // Connect to backend WebSocket
+console.log("Streamer websocket connected\n");
 
 function StreamerQuestions() {
   const [questions, setQuestions] = useState([]);
 
   useEffect(() => {
     // Fetch all of the questions from the server
-    fetch("https://xanmankey.vulcan.moe/get_questions")
+    fetch(BACKEND + "/get_questions")
       .then((response) => response.json())
       .then((data) => {
         setQuestions(data);

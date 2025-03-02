@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { BACKEND } from "../utils.tsx";
 
 function ViewerLeaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
 
   useEffect(() => {
     // Fetch the current leaderboard for the viewer, highlighting the player; TODO pass username
-    fetch("https://xanmankey.vulcan.moe/leaderboard")
+    fetch(BACKEND + "/leaderboard")
       .then((response) => response.json())
       .then((data) => {
         setLeaderboard(data);

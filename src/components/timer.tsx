@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Timer({ duration }: { duration: number }) {
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(duration);
 
   useEffect(() => {
-    if (timeLeft <= 0) return; // Stop when time reaches zero
+    if (timeLeft <= 0) {
+      // Stop when time reaches zero
+      // Render the responses
+      navigate("/responses");
+    }
 
     const interval = setTimeout(() => {
       setTimeLeft((prevTime) => prevTime - 1);

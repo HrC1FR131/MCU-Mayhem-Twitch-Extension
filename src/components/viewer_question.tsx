@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { BACKEND } from "../utils.tsx";
 
-const socket = io("https://xanmankey.vulcan.moe"); // Connect to backend WebSocket
+const socket = io(BACKEND); // Connect to backend WebSocket
 
 // Three different question types
 // 1. Multiple choice
