@@ -3,6 +3,7 @@ import { BACKEND } from "../utils.tsx";
 import { useLocation } from "react-router-dom";
 
 import { Question } from "../interfaces/Question.tsx";
+import { useNavigate } from "react-router-dom";
 
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion.tsx";
 import ShortAnswerQuestion from "./ShortAnswerQuestion.tsx";
@@ -19,6 +20,7 @@ import { username } from "../webhooks/onload.tsx";
 // - When people join stream, create a user account, and set the player username variable locally for access across the application
 
 function ViewerQuestion() {
+  const navigate = useNavigate();
   const location = useLocation();
   const question = JSON.parse(location.state?.question.question.question);
 
@@ -28,13 +30,15 @@ function ViewerQuestion() {
     formData.append("username", username); // Replace with actual username variable
     formData.append("response", response);
 
-    fetch(`${BACKEND}/responses`, {
+    fetch(BACKEND + "/response", {
       method: "POST",
       body: formData,
     })
       .then((res) => res.json())
       .then((data) => {
         console.log("Response submitted successfully:", data);
+        navigate("/answered");
+        navigate(0);
       })
       .catch((error) => {
         console.error("Error submitting response:", error);
