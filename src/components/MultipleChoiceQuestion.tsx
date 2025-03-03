@@ -6,7 +6,7 @@ import { QuestionProps } from "../interfaces/QuestionProps";
 function MultipleChoiceQuestion({ question, sendResponse }: QuestionProps) {
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">
-      <h2 className="text-2xl font-bold mb-4">{question.question}</h2>
+      <h1 className="text-4xl font-bold mb-4">{question.question}</h1>
       <div className="grid grid-cols-2 gap-4">
         {question.choices.split(",").map((choice, index) => (
           <button

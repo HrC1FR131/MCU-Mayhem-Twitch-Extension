@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { BACKEND } from "../utils.tsx";
+import { useLocation } from "react-router-dom";
 
 import { Question } from "../interfaces/Question.tsx";
 
@@ -18,14 +19,8 @@ import { username } from "../webhooks/onload.tsx";
 // - When people join stream, create a user account, and set the player username variable locally for access across the application
 
 function ViewerQuestion() {
-  const [question, setQuestion] = useState<Question | null>(null);
-
-  useEffect(() => {
-    const state = window.history.state;
-    if (state && state.question) {
-      setQuestion(state.question);
-    }
-  }, []);
+  const location = useLocation();
+  const question = JSON.parse(location.state?.question.question.question);
 
   // Send the response to the server
   const sendResponse = (response: string) => {
@@ -49,18 +44,18 @@ function ViewerQuestion() {
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">
       {question ? (
-        question.type === "multiple_choice" ||
-        question.type === "this_or_that" ? (
+        question.question_type === "multiple_choice" ||
+        question.question_type === "this_or_that" ? (
           <MultipleChoiceQuestion
             question={question}
             sendResponse={sendResponse}
           />
-        ) : question.type === "short_answer" ? (
+        ) : question.question_type === "short_answer" ? (
           <ShortAnswerQuestion
             question={question}
             sendResponse={sendResponse}
           />
-        ) : question.type === "numbers" ? (
+        ) : question.question_type === "numbers" ? (
           <NumberQuestion question={question} sendResponse={sendResponse} />
         ) : (
           <p className="text-2xl font-bold">Unknown question type</p>
