@@ -20,6 +20,7 @@ function ViewerLeaderboard() {
       // Navigate to the question page
       console.log("New question received:", data);
       navigate("/question", { state: { question: data } });
+      navigate(0);
     });
 
     return () => {

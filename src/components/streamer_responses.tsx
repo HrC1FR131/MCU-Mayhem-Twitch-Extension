@@ -1,14 +1,17 @@
 import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { BACKEND } from "../utils.tsx";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 // For bar and pie charts
 import { Chart } from "chart.js/auto";
-import { CategoryScale } from "chart.js";
+import { CategoryScale, ChartConfiguration } from "chart.js";
 import "chart.js/auto";
+import { WordCloudController, WordElement } from "chartjs-chart-wordcloud";
 // For word clouds
-import WordCloud from "wordcloud";
+// import WordCloud from "wordcloud";
+
+Chart.register(WordCloudController, WordElement);
 
 const processResponses = (responses: Record<string, string>) => {
   const counts: Record<string, number> = {};
@@ -29,9 +32,12 @@ function StreamerResponses() {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const questionNumber = searchParams.get("question_number");
-  console.log(questionNumber);
+  const correctAnswers = searchParams.get("answer")?.split(",");
+  console.log("question Number: " + questionNumber);
+  console.log("Correct answers: " + correctAnswers?.toString());
 
   useEffect(() => {
+    console.log("useEffect streamer responses");
     fetch(BACKEND + "/end_question?question_number=" + questionNumber)
       .then((response) => response.json())
       .then((data) => {
@@ -61,17 +67,28 @@ function StreamerResponses() {
                 datasets: [
                   {
                     data: counts,
-                    backgroundColor: [
-                      "#FF6384",
-                      "#36A2EB",
-                      "#FFCE56",
-                      "#4BC0C0",
-                    ],
+                    backgroundColor: labels.map((label) =>
+                      correctAnswers?.includes(label) ? "green" : "red"
+                    ),
                   },
                 ],
               },
+              options: {
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
             });
           } else if (data.question_type === "numbers") {
+            const closestLabel = labels.reduce((prev, curr) => {
+              return Math.abs(Number(curr) - Number(correctAnswers?.[0])) <
+                Math.abs(Number(prev) - Number(correctAnswers?.[0]))
+                ? curr
+                : prev;
+            });
+
             new Chart(ctx, {
               type: "bar",
               data: {
@@ -79,26 +96,50 @@ function StreamerResponses() {
                 datasets: [
                   {
                     data: counts,
-                    backgroundColor: "#36A2EB",
+                    backgroundColor: labels.map((label) =>
+                      label === closestLabel ? "green" : "red"
+                    ),
                   },
                 ],
               },
+              options: {
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+              },
             });
           } else if (data.question_type === "short_answer") {
-            // WordCloud(chartRef.current, {
-            //   list: labels.map((label, index) => [label, counts[index]]),
-            // });
-            console.log(labels);
-            console.log(counts);
-            console.log(WordCloud.isSupported);
-            WordCloud(chartRef.current, {
-              list: labels.map((label, index) => [label, counts[index]]),
-              minSize: 12,
-              weightFactor: 2,
-              fontFamily: "Impact",
-              color: "random-dark",
-              rotateRatio: 0.5,
-              backgroundColor: "#f9f9f9",
+            new Chart(ctx, {
+              type: WordCloudController.id,
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    data: counts.map((count) => 10 + count * 10),
+                  },
+                ],
+              },
+              options: {
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                elements: {
+                  word: {
+                    color: (context) => {
+                      const labels = context.chart.data.labels;
+                      const label = labels
+                        ? (labels[context.dataIndex] as string)
+                        : "";
+                      console.log(label);
+                      return correctAnswers?.includes(label) ? "green" : "red";
+                    },
+                  },
+                },
+              },
             });
           }
         }
@@ -110,19 +151,25 @@ function StreamerResponses() {
         chartInstanceRef.current = null;
       }
     };
-  }, [questionNumber]);
+  }, []);
 
   return (
     <div
       key={questionNumber}
       style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        width: "100%",
+        height: "80%",
+        display: "flex",
+        paddingTop: "10%",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <canvas ref={chartRef} id="chart" />
+      <canvas
+        ref={chartRef}
+        id="chart"
+        style={{ maxWidth: "100%", maxHeight: "100%" }}
+      />
     </div>
   );
 }

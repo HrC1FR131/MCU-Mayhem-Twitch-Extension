@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
-import { useNavigate, BrowserRouter as Router } from "react-router-dom";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  redirect,
+} from "react-router-dom";
 
 function TimerComponent({
   duration,
   question_number,
+  answer,
 }: {
   duration: number;
   question_number: number;
+  answer: string;
 }) {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -25,9 +31,10 @@ function TimerComponent({
         );
       }
       // Render the responses
-      navigate(`/responses?question_number=${question_number}`, {
-        replace: true,
-      });
+      navigate(
+        `/responses?question_number=${question_number}&answer=${answer}`
+      );
+      navigate(0);
     }
 
     const interval = setTimeout(() => {
@@ -52,13 +59,19 @@ function TimerComponent({
 function Timer({
   duration,
   question_number,
+  answer,
 }: {
   duration: number;
   question_number: number;
+  answer: string;
 }) {
   return (
     <Router>
-      <TimerComponent duration={duration} question_number={question_number} />
+      <TimerComponent
+        duration={duration}
+        question_number={question_number}
+        answer={answer}
+      />
     </Router>
   );
 }

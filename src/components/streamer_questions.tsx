@@ -28,6 +28,7 @@ function StreamerQuestions() {
     const timerContainer = document.getElementById("timer");
     const root = createRoot(timerContainer!);
     const parsedQuestion = JSON.parse(question);
+    console.log(parsedQuestion);
     root.render(
       <div
         style={{
@@ -45,6 +46,7 @@ function StreamerQuestions() {
         <Timer
           duration={parsedQuestion.time}
           question_number={parsedQuestion.number}
+          answer={parsedQuestion.answer}
         />
       </div>
     );
@@ -54,8 +56,8 @@ function StreamerQuestions() {
     <div
       style={{
         display: "flex",
-        justifyContent: "right",
-        paddingTop: "10%",
+        justifyContent: "center",
+        paddingTop: "5%",
       }}
       id="timer"
     >
