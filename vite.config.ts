@@ -12,7 +12,7 @@ export default defineConfig({
       key: fs.readFileSync("cert.key"), // Use .key file
       cert: fs.readFileSync("cert.crt"), // Use .crt file
     },
-    port: 8080,
+    port: 8000,
   },
   build: {
     rollupOptions: {

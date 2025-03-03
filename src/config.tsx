@@ -5,6 +5,8 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <p>Config</p>
+    <p>
+      Wow look at all these great config options that I definitely implemented
+    </p>
   </StrictMode>
 );

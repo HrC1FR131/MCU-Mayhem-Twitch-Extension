@@ -1,11 +1,31 @@
 import { useEffect, useState } from "react";
 import { BACKEND } from "../utils.tsx";
+import { io } from "socket.io-client";
 
 import { Player } from "../interfaces/Player.tsx";
+import { useNavigate } from "react-router-dom";
+import { addUser } from "../webhooks/onload.tsx";
+
+const socket = io(BACKEND); // Connect to backend WebSocket
+addUser(); // Add user to database; will be replaced with Twitch API
 
 function ViewerLeaderboard() {
+  const navigate = useNavigate();
   const [leaderboard, setLeaderboard] = useState<Player[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Listen for new questions via WebSocket
+  useEffect(() => {
+    socket.on("new_question", (data) => {
+      // Navigate to the question page
+      console.log("New question received:", data);
+      navigate("/question", { state: { question: data } });
+    });
+
+    return () => {
+      socket.off("new_question");
+    }; // Cleanup on unmount (does this mean it will only run once?)
+  }, []); // Runs once and listens for new questions
 
   useEffect(() => {
     // Fetch the current leaderboard for the viewer, highlighting the player; TODO pass username
