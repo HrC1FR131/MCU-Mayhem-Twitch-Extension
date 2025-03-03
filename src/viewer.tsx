@@ -10,6 +10,9 @@ import ViewerQuestion from "./components/viewer_question";
 createRoot(document.getElementById("root")!).render(
   <Router>
     <ViewerLeaderboard></ViewerLeaderboard>
-    {/* TODO: create routes for viewer questions */}
+    <Routes>
+      <Route path="/" element={<ViewerLeaderboard />} />
+      <Route path="/question" element={<ViewerQuestion />} />
+    </Routes>
   </Router>
 );
