@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { BACKEND } from "../utils.tsx";
 
-import { socket } from "../utils.tsx";
+// import { socket } from "../utils.tsx";
+import { SocketContext } from "../utils.tsx";
 import { Player } from "../interfaces/Player.tsx";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../webhooks/onload.tsx";
 
+const socket = useContext(SocketContext);
 // addUser(); // Add user to database; will be replaced with Twitch API
 
 function ViewerLeaderboard() {

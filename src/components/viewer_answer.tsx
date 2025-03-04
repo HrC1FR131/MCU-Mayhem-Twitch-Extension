@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
-import { socket } from "../utils";
+import React, { useEffect, useContext } from "react";
+import { SocketContext } from "../utils";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import { username } from "../webhooks/onload";
+
+const socket = useContext(SocketContext);
 
 // Loaded after a viewer answers; timer will be displayed on streamers end
 

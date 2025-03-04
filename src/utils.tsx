@@ -1,5 +1,7 @@
 import io from "socket.io-client";
 
+import { createContext } from "react";
+
 export const BACKEND = "https://xanmankey.vulcan.moe";
 export const socket = io("wss://xanmankey.vulcan.moe", {
   transports: ["websocket"], // Ensure WebSocket transport is used
@@ -10,3 +12,13 @@ export const socket = io("wss://xanmankey.vulcan.moe", {
   timeout: 20000, // Connection timeout of 20 seconds
   // autoConnect: false, // disable autoConnect on import
 });
+
+export const SocketContext = createContext(socket);
+
+import { ReactNode } from "react";
+
+export const SocketProvider = ({ children }: { children: ReactNode }) => {
+  return (
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
+  );
+};

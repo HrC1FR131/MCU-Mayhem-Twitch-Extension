@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   useNavigate,
   BrowserRouter as Router,
   redirect,
 } from "react-router-dom";
 
-import { socket } from "../utils";
+// import { socket } from "../utils";
+import { SocketContext } from "../utils";
+
+const socket = useContext(SocketContext);
 
 function TimerComponent({
   duration,
