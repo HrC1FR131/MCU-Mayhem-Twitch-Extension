@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 
 export const BACKEND = "https://xanmankey.vulcan.moe";
-export const socket = io(BACKEND, {
+export const socket = io("wss://xanmankey.vulcan.moe", {
   transports: ["websocket"], // Ensure WebSocket transport is used
   reconnection: true, // Enable reconnection
   reconnectionAttempts: Infinity, // Unlimited reconnection attempts

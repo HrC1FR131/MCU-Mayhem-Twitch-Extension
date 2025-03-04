@@ -14,7 +14,11 @@ function MultipleChoiceQuestion({ question, sendResponse }: QuestionProps) {
         className="border p-2"
         placeholder="Type your answer..."
         value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value.length <= 200) {
+            setAnswer(e.target.value);
+          }
+        }}
       />
       <button
         className="bg-blue-500 text-white px-4 py-2 mt-4"
