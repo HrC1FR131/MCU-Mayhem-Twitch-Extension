@@ -20,6 +20,7 @@ function TimerComponent({
   const [timeLeft, setTimeLeft] = useState(duration);
 
   useEffect(() => {
+    let interval: NodeJS.Timeout;
     if (timeLeft <= 0) {
       console.log("times up");
       // Remove timer from the page
@@ -40,12 +41,11 @@ function TimerComponent({
       // navigate(0);
       // Emit the answer to the server
       socket.emit("end_question", { question_number });
+    } else {
+      interval = setTimeout(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
     }
-
-    const interval = setTimeout(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-    }, 1000);
-
     return () => clearTimeout(interval); // Cleanup on unmount
   }, [timeLeft, navigate, question_number]);
 
