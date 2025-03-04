@@ -50,6 +50,7 @@ function TimerComponent({
   }, [timeLeft, navigate, question_number]);
 
   useEffect(() => {
+    console.log("useEffect timer with results calls");
     socket.on("results", (data) => {
       navigate("/responses", { state: { data: data } });
       navigate(0);
@@ -58,7 +59,7 @@ function TimerComponent({
     return () => {
       socket.off("results");
     };
-  }, [navigate]);
+  }, []);
 
   const minutes = Math.floor(timeLeft / 60)
     .toString()

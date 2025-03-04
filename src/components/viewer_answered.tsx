@@ -11,6 +11,7 @@ function ViewerAnswered() {
   const question = location.state?.question;
 
   React.useEffect(() => {
+    console.log("useEffect viewer_answered with results calls");
     socket.on("results", (data) => {
       navigate("/answer", {
         state: { correct: question.answer.split(",").includes(response) },

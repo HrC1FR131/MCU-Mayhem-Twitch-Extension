@@ -48,6 +48,7 @@ function ViewerQuestion() {
   };
 
   useEffect(() => {
+    console.log("useEffect viewer_question with results calls");
     socket.on("results", (data) => {
       navigate("/answer", {
         state: { correct: "false" },
@@ -58,7 +59,7 @@ function ViewerQuestion() {
     return () => {
       socket.off("results");
     };
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">
