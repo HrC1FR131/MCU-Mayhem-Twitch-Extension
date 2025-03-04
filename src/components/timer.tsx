@@ -18,6 +18,7 @@ function TimerComponent({
 }) {
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(duration);
+  let end_question_emitted = false;
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -40,7 +41,10 @@ function TimerComponent({
       // );
       // navigate(0);
       // Emit the answer to the server
-      socket.emit("end_question", { question_number });
+      if (!end_question_emitted) {
+        socket.emit("end_question", { question_number });
+        end_question_emitted = true;
+      }
     } else {
       interval = setTimeout(() => {
         setTimeLeft((prevTime) => prevTime - 1);
@@ -52,6 +56,7 @@ function TimerComponent({
   useEffect(() => {
     console.log("useEffect timer with results calls");
     socket.on("results", (data) => {
+      console.log("results", data);
       navigate("/responses", { state: { data: data } });
       navigate(0);
     });

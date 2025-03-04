@@ -30,13 +30,15 @@ function StreamerResponses() {
   const location = useLocation();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
+  // TODO: this is the wrong data for some reason (or the server isn't updating correctly)
   const data = location.state?.data;
 
   useEffect(() => {
     console.log("useEffect streamer responses");
-    console.log("question results", data);
     const responses = data.responses;
-    const correctAnswers = data.question.answer?.split(",");
+    // correctAnswers is undefined?
+    const correctAnswers = data.answer?.split(",");
+    console.log(correctAnswers);
     if (!chartRef.current) return;
 
     const ctx = chartRef.current.getContext("2d");

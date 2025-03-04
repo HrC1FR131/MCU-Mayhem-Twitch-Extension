@@ -14,7 +14,7 @@ function NumberQuestion({ question, sendResponse }: QuestionProps) {
         className="border p-2"
         placeholder="Enter a number..."
         value={number}
-        onChange={(e) => setNumber(e.target.value)}
+        onChange={(e) => setNumber(e.target.value.replace(/[^0-9]/g, ""))}
       />
       <button
         className="bg-green-500 text-white px-4 py-2 mt-4"
