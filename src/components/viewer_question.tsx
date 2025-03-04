@@ -51,7 +51,7 @@ function ViewerQuestion() {
     console.log("useEffect viewer_question with results calls");
     socket.on("results", (data) => {
       navigate("/answer", {
-        state: { correct: "false" },
+        state: { correct: false },
       });
       navigate(0);
     });
