@@ -12,7 +12,7 @@ function ViewerAnswer() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/leaderboard");
+      navigate("/");
     }, 5000);
 
     return () => clearTimeout(timer);
