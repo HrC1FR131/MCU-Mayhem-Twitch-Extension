@@ -40,6 +40,8 @@ function TimerComponent({
       // navigate(0);
       // Emit the answer to the server
       socket.emit("end_question", { question_number });
+      navigate("/responses");
+      navigate(0);
     }
 
     const interval = setTimeout(() => {

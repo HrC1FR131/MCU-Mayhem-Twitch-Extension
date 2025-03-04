@@ -146,7 +146,7 @@ function StreamerResponses() {
         chartInstanceRef.current = null;
       }
     };
-  }, [data]);
+  }, []);
 
   return (
     <div
