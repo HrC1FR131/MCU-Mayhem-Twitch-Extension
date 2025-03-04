@@ -8,8 +8,6 @@ import {
 // import { socket } from "../utils";
 import { SocketContext } from "../utils";
 
-const socket = useContext(SocketContext);
-
 function TimerComponent({
   duration,
   question_number,
@@ -19,6 +17,7 @@ function TimerComponent({
   question_number: number;
   answer: string;
 }) {
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(duration);
   let end_question_emitted = false;

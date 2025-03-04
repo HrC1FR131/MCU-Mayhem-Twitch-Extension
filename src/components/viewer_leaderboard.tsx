@@ -7,10 +7,10 @@ import { Player } from "../interfaces/Player.tsx";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../webhooks/onload.tsx";
 
-const socket = useContext(SocketContext);
 // addUser(); // Add user to database; will be replaced with Twitch API
 
 function ViewerLeaderboard() {
+  const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const [leaderboard, setLeaderboard] = useState<Player[]>([]);
   const [searchTerm, setSearchTerm] = useState("");

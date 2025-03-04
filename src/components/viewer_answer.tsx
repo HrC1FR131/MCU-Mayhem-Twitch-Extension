@@ -4,11 +4,10 @@ import { SocketContext } from "../utils";
 import { useNavigate, useLocation } from "react-router-dom";
 import { username } from "../webhooks/onload";
 
-const socket = useContext(SocketContext);
-
 // Loaded after a viewer answers; timer will be displayed on streamers end
 
 function ViewerAnswer() {
+  const socket = useContext(SocketContext);
   const location = useLocation();
   const correct = location.state?.correct;
   const navigate = useNavigate();
