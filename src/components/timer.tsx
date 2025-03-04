@@ -42,19 +42,19 @@ function TimerComponent({
       socket.emit("end_question", { question_number });
     }
 
-    useEffect(() => {
-      socket.on("results", (data) => {
-        navigate("/responses", { state: { data: data } });
-        navigate(0);
-      });
-    }, [navigate]);
-
     const interval = setTimeout(() => {
       setTimeLeft((prevTime) => prevTime - 1);
     }, 1000);
 
     return () => clearTimeout(interval); // Cleanup on unmount
   }, [timeLeft, navigate, question_number]);
+
+  useEffect(() => {
+    socket.on("results", (data) => {
+      navigate("/responses", { state: { data: data } });
+      navigate(0);
+    });
+  }, [navigate]);
 
   const minutes = Math.floor(timeLeft / 60)
     .toString()
