@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BACKEND } from "../utils.tsx";
+import { BACKEND, socket } from "../utils.tsx";
 import { useLocation } from "react-router-dom";
 
 import { Question } from "../interfaces/Question.tsx";
@@ -46,6 +46,13 @@ function ViewerQuestion() {
         console.error("Error submitting response:", error);
       });
   };
+
+  socket.on("results", (data) => {
+    navigate("/answer", {
+      state: { correct: "false" },
+    });
+    navigate(0);
+  });
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">

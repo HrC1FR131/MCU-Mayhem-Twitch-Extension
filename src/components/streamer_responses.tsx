@@ -27,17 +27,15 @@ const processResponses = (responses: Record<string, string>) => {
 };
 
 function StreamerResponses() {
-  const location = useLocation();
-  const [searchParams] = useSearchParams();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-  const data = JSON.parse(location.state?.end_question);
-  const responses = data.responses;
-  const correctAnswers = data.question.answer?.split(",");
 
   useEffect(() => {
     console.log("useEffect streamer responses");
-    socket.on("end_question", (data) => {
+    socket.on("results", (data) => {
+      console.log("question results", data);
+      const responses = data.responses;
+      const correctAnswers = data.question.answer?.split(",");
       if (!chartRef.current) return;
 
       const ctx = chartRef.current.getContext("2d");

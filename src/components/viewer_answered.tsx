@@ -10,7 +10,7 @@ function ViewerAnswered() {
   const response = location.state?.response;
   const question = location.state?.question;
 
-  socket.on("end_question", (data) => {
+  socket.on("results", (data) => {
     navigate("/answer", {
       state: { correct: question.answer.split(",").includes(response) },
     });

@@ -21,6 +21,7 @@ function TimerComponent({
 
   useEffect(() => {
     if (timeLeft <= 0) {
+      console.log("times up");
       // Remove timer from the page
       const timerElement = document.getElementById("timer");
       if (
