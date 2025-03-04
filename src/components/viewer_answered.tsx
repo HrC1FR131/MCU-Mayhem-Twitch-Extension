@@ -14,7 +14,12 @@ function ViewerAnswered() {
     console.log("useEffect viewer_answered with results calls");
     socket.on("results", (data) => {
       navigate("/answer", {
-        state: { correct: question.answer.split(",").includes(response) },
+        state: {
+          correct: question.answer
+            .toLowerCase()
+            .split(",")
+            .includes(response.toLowerCase()),
+        },
       });
       navigate(0);
     });

@@ -131,7 +131,11 @@ function StreamerResponses() {
                     ? (labels[context.dataIndex] as string)
                     : "";
                   console.log(label);
-                  return correctAnswers?.includes(label) ? "green" : "red";
+                  return correctAnswers?.some((answer: string) =>
+                    label.toLowerCase().includes(answer.toLowerCase())
+                  )
+                    ? "green"
+                    : "red";
                 },
               },
             },
