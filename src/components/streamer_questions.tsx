@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import Timer from "./timer";
 import { createRoot } from "react-dom/client";
-import { BACKEND } from "../utils.tsx";
+import { BACKEND, socket } from "../utils.tsx";
 
 import { Question } from "../interfaces/Question.tsx";
 
-const socket = io(BACKEND); // Connect to backend WebSocket
 console.log("Streamer websocket connected\n");
 
 function StreamerQuestions() {

@@ -5,6 +5,8 @@ import {
   redirect,
 } from "react-router-dom";
 
+import { socket } from "../utils";
+
 function TimerComponent({
   duration,
   question_number,
@@ -31,10 +33,12 @@ function TimerComponent({
         );
       }
       // Render the responses
-      navigate(
-        `/responses?question_number=${question_number}&answer=${answer}`
-      );
-      navigate(0);
+      // navigate(
+      //   `/responses?question_number=${question_number}&answer=${answer}`
+      // );
+      // navigate(0);
+      // Emit the answer to the server
+      socket.emit("end_question", { question_number });
     }
 
     const interval = setTimeout(() => {

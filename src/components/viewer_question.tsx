@@ -27,7 +27,7 @@ function ViewerQuestion() {
   // Send the response to the server
   const sendResponse = (response: string) => {
     const formData = new FormData();
-    formData.append("username", username); // Replace with actual username variable
+    formData.append("username", username);
     formData.append("response", response);
 
     fetch(BACKEND + "/response", {
@@ -37,7 +37,9 @@ function ViewerQuestion() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Response submitted successfully:", data);
-        navigate("/answered");
+        navigate("/answered", {
+          state: { response: response, question: question },
+        });
         navigate(0);
       })
       .catch((error) => {

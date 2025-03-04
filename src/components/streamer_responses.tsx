@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { io } from "socket.io-client";
-import { BACKEND } from "../utils.tsx";
-import { useParams, useSearchParams } from "react-router-dom";
+import { BACKEND, socket } from "../utils.tsx";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 
 // For bar and pie charts
 import { Chart } from "chart.js/auto";
@@ -28,122 +27,120 @@ const processResponses = (responses: Record<string, string>) => {
 };
 
 function StreamerResponses() {
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-  const questionNumber = searchParams.get("question_number");
-  const correctAnswers = searchParams.get("answer")?.split(",");
-  console.log("question Number: " + questionNumber);
-  console.log("Correct answers: " + correctAnswers?.toString());
+  const data = JSON.parse(location.state?.end_question);
+  const responses = data.responses;
+  const correctAnswers = data.question.answer?.split(",");
 
   useEffect(() => {
     console.log("useEffect streamer responses");
-    fetch(BACKEND + "/end_question?question_number=" + questionNumber)
-      .then((response) => response.json())
-      .then((data) => {
-        if (!chartRef.current) return;
+    socket.on("end_question", (data) => {
+      if (!chartRef.current) return;
 
-        const ctx = chartRef.current.getContext("2d");
-        if (!ctx) return;
+      const ctx = chartRef.current.getContext("2d");
+      if (!ctx) return;
 
-        // Destroy previous chart if it exists
-        if (chartInstanceRef.current) {
-          chartInstanceRef.current.destroy();
-          chartInstanceRef.current = null;
+      // Destroy previous chart if it exists
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+        chartInstanceRef.current = null;
+      }
+
+      console.log(data);
+      const { labels, counts } = processResponses(responses);
+
+      if (ctx) {
+        if (
+          data.question_type === "multiple_choice" ||
+          data.question_type === "this_or_that"
+        ) {
+          new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  data: counts,
+                  backgroundColor: labels.map((label) =>
+                    correctAnswers?.includes(label) ? "green" : "red"
+                  ),
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+            },
+          });
+        } else if (data.question_type === "numbers") {
+          const closestLabel = labels.reduce((prev, curr) => {
+            return Math.abs(Number(curr) - Number(correctAnswers?.[0])) <
+              Math.abs(Number(prev) - Number(correctAnswers?.[0]))
+              ? curr
+              : prev;
+          });
+
+          new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  data: counts,
+                  backgroundColor: labels.map((label) =>
+                    label === closestLabel ? "green" : "red"
+                  ),
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+            },
+          });
+        } else if (data.question_type === "short_answer") {
+          new Chart(ctx, {
+            type: WordCloudController.id,
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  data: counts.map((count) => 10 + count * 10),
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              elements: {
+                word: {
+                  color: (context) => {
+                    const labels = context.chart.data.labels;
+                    const label = labels
+                      ? (labels[context.dataIndex] as string)
+                      : "";
+                    console.log(label);
+                    return correctAnswers?.includes(label) ? "green" : "red";
+                  },
+                },
+              },
+            },
+          });
         }
-
-        console.log(data);
-        const { labels, counts } = processResponses(data.responses);
-
-        if (ctx) {
-          if (
-            data.question_type === "multiple_choice" ||
-            data.question_type === "this_or_that"
-          ) {
-            new Chart(ctx, {
-              type: "pie",
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    data: counts,
-                    backgroundColor: labels.map((label) =>
-                      correctAnswers?.includes(label) ? "green" : "red"
-                    ),
-                  },
-                ],
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              },
-            });
-          } else if (data.question_type === "numbers") {
-            const closestLabel = labels.reduce((prev, curr) => {
-              return Math.abs(Number(curr) - Number(correctAnswers?.[0])) <
-                Math.abs(Number(prev) - Number(correctAnswers?.[0]))
-                ? curr
-                : prev;
-            });
-
-            new Chart(ctx, {
-              type: "bar",
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    data: counts,
-                    backgroundColor: labels.map((label) =>
-                      label === closestLabel ? "green" : "red"
-                    ),
-                  },
-                ],
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-              },
-            });
-          } else if (data.question_type === "short_answer") {
-            new Chart(ctx, {
-              type: WordCloudController.id,
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    data: counts.map((count) => 10 + count * 10),
-                  },
-                ],
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-                elements: {
-                  word: {
-                    color: (context) => {
-                      const labels = context.chart.data.labels;
-                      const label = labels
-                        ? (labels[context.dataIndex] as string)
-                        : "";
-                      console.log(label);
-                      return correctAnswers?.includes(label) ? "green" : "red";
-                    },
-                  },
-                },
-              },
-            });
-          }
-        }
-      });
+      }
+    });
     // Cleanup function to destroy chart when component unmounts
     return () => {
       if (chartInstanceRef.current) {
@@ -151,11 +148,10 @@ function StreamerResponses() {
         chartInstanceRef.current = null;
       }
     };
-  }, []);
+  }, [data]);
 
   return (
     <div
-      key={questionNumber}
       style={{
         width: "100%",
         height: "80%",
