@@ -40,9 +40,14 @@ function TimerComponent({
       // navigate(0);
       // Emit the answer to the server
       socket.emit("end_question", { question_number });
-      navigate("/responses");
-      navigate(0);
     }
+
+    useEffect(() => {
+      socket.on("results", (data) => {
+        navigate("/responses", { state: { data: data } });
+        navigate(0);
+      });
+    }, [navigate]);
 
     const interval = setTimeout(() => {
       setTimeLeft((prevTime) => prevTime - 1);
