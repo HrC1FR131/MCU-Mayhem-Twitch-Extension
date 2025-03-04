@@ -47,12 +47,18 @@ function ViewerQuestion() {
       });
   };
 
-  socket.on("results", (data) => {
-    navigate("/answer", {
-      state: { correct: "false" },
+  useEffect(() => {
+    socket.on("results", (data) => {
+      navigate("/answer", {
+        state: { correct: "false" },
+      });
+      navigate(0);
     });
-    navigate(0);
-  });
+
+    return () => {
+      socket.off("results");
+    };
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-screen">

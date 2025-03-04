@@ -54,6 +54,10 @@ function TimerComponent({
       navigate("/responses", { state: { data: data } });
       navigate(0);
     });
+
+    return () => {
+      socket.off("results");
+    };
   }, [navigate]);
 
   const minutes = Math.floor(timeLeft / 60)

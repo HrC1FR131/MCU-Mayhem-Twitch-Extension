@@ -10,12 +10,18 @@ function ViewerAnswered() {
   const response = location.state?.response;
   const question = location.state?.question;
 
-  socket.on("results", (data) => {
-    navigate("/answer", {
-      state: { correct: question.answer.split(",").includes(response) },
+  React.useEffect(() => {
+    socket.on("results", (data) => {
+      navigate("/answer", {
+        state: { correct: question.answer.split(",").includes(response) },
+      });
+      navigate(0);
     });
-    navigate(0);
-  });
+
+    return () => {
+      socket.off("results");
+    };
+  }, [navigate, question, response]);
 
   return (
     <div className="bg-gray-200 h-screen w-screen flex flex-col items-center justify-center">
