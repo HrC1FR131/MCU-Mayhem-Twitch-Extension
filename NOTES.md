@@ -1,5 +1,13 @@
 # NOTES
 
+## TODO
+
+- Couple problems currently
+
+  - Main one is to finish up, likely the main issue is that beginning end question is being called twice (in fact everything is; sockets?)
+  - Next one is to integrate with twitch and run a hosted test w/ manoli; I only plan on working on this tmr evening and studying the rest of the day
+  - Finally, need to submit for approval and reach out with an email
+
 - We're developing a component extension; it displays as part of the video and takes up part of the screen, but can be hidden by viewers
 - ?platform=mobile and ?platform=web
 - <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>; all extensions must import this

@@ -12,7 +12,7 @@ import { BACKEND } from "../utils";
 // I need to write a bypass;
 // something where the user's username will still get added to the database and the connection will be made
 // even if a twitch connection doesn't occur
-export let username: string;
+export let username: string = "Player1";
 export function addUser() {
   username = "user" + Math.floor(Math.random() * 10000).toString();
   console.log("Adding user:", username);

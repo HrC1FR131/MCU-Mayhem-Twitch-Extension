@@ -26,6 +26,7 @@ function ViewerQuestion() {
 
   // Send the response to the server
   const sendResponse = (response: string) => {
+    console.log("Sending response:", response);
     const formData = new FormData();
     formData.append("username", username);
     formData.append("response", response);
@@ -34,9 +35,15 @@ function ViewerQuestion() {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
-        console.log("Response submitted successfully:", data);
+        // console.log("Response submitted successfully");
+        // console.log(data.results.responses);
+        // console.log(data.results.question);
+        // console.log(data.results.question_type);
+        // console.log(data);
         navigate("/answered", {
           state: { response: response, question: question },
         });
