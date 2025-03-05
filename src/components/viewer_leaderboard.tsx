@@ -5,8 +5,29 @@ import { BACKEND } from "../utils.tsx";
 import { SocketContext } from "../utils.tsx";
 import { Player } from "../interfaces/Player.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import { username } from "../utils.tsx";
 
 // addUser(); // Add user to database; will be replaced with Twitch API
+
+function createUserAccount(name: string) {
+  const formData = new FormData();
+  formData.append("username", name);
+
+  fetch(BACKEND + "/create_player", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("User account created successfully");
+      } else {
+        console.error("Error creating user account:", response.statusText);
+      }
+    })
+    .catch((err) => {
+      console.error("Error sending data to backend:", err);
+    });
+}
 
 function ViewerLeaderboard() {
   const socket = useContext(SocketContext);
@@ -42,7 +63,7 @@ function ViewerLeaderboard() {
     player.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  return (
+  return username != undefined ? (
     <div
       className="flex flex-col items-center justify-center h-screen w-screen"
       key={location.key}
@@ -68,12 +89,22 @@ function ViewerLeaderboard() {
         ))}
       </div>
     </div>
+  ) : (
+    <div
+      className="flex flex-col items-center justify-center h-screen w-screen"
+      key={location.key}
+    >
+      <p className="text-4xl font-bold">Your first question</p>
+      <input
+        type="text"
+        placeholder="Enter a username"
+        className="w-64 px-4 py-2 mb-4 rounded-full border border-gray-300 focus:outline-none"
+        onChange={(e) => {
+          createUserAccount(e.target.value);
+        }}
+      />
+    </div>
   );
-  {
-    !searchTerm && (
-      <div className="text-2xl font-bold mt-4">Your first question</div>
-    );
-  }
 }
 
 export default ViewerLeaderboard;
