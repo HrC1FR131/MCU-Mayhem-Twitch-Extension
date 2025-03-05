@@ -2,7 +2,15 @@ import io from "socket.io-client";
 
 import { createContext } from "react";
 
-export let username: string;
+export const userState = {
+  username: localStorage.getItem("username") || "",
+};
+
+export function setUsername(name: string) {
+  userState.username = name;
+  localStorage.setItem("username", name);
+}
+
 export const BACKEND = "https://xanmankey.vulcan.moe";
 export const socket = io("wss://xanmankey.vulcan.moe", {
   transports: ["websocket"], // Ensure WebSocket transport is used

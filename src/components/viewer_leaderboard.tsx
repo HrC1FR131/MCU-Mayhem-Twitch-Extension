@@ -5,29 +5,9 @@ import { BACKEND } from "../utils.tsx";
 import { SocketContext } from "../utils.tsx";
 import { Player } from "../interfaces/Player.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { username } from "../utils.tsx";
+import { userState, setUsername } from "../utils.tsx";
 
 // addUser(); // Add user to database; will be replaced with Twitch API
-
-function createUserAccount(name: string) {
-  const formData = new FormData();
-  formData.append("username", name);
-
-  fetch(BACKEND + "/create_player", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => {
-      if (response.ok) {
-        console.log("User account created successfully");
-      } else {
-        console.error("Error creating user account:", response.statusText);
-      }
-    })
-    .catch((err) => {
-      console.error("Error sending data to backend:", err);
-    });
-}
 
 function ViewerLeaderboard() {
   const socket = useContext(SocketContext);
@@ -63,7 +43,7 @@ function ViewerLeaderboard() {
     player.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  return username != undefined ? (
+  return userState.username != "" ? (
     <div
       className="flex flex-col items-center justify-center h-screen w-screen"
       key={location.key}
@@ -94,15 +74,50 @@ function ViewerLeaderboard() {
       className="flex flex-col items-center justify-center h-screen w-screen"
       key={location.key}
     >
-      <p className="text-4xl font-bold">Your first question</p>
-      <input
-        type="text"
-        placeholder="Enter a username"
-        className="w-64 px-4 py-2 mb-4 rounded-full border border-gray-300 focus:outline-none"
-        onChange={(e) => {
-          createUserAccount(e.target.value);
+      <p className="text-4xl font-bold py-2">Your first question</p>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target as HTMLFormElement);
+          const username = formData.get("username") as string;
+
+          fetch(BACKEND + "/create_player", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("User account created successfully");
+                setUsername(username);
+                navigate("/");
+              } else {
+                console.error(
+                  "Error creating user account:",
+                  response.statusText
+                );
+              }
+            })
+            .catch((err) => {
+              console.error("Error sending data to backend:", err);
+            });
         }}
-      />
+        className="w-64"
+      >
+        <input
+          type="text"
+          name="username"
+          placeholder="Enter a UNIQUE username"
+          className="w-full px-4 py-2 mb-4 rounded-full border border-gray-300 focus:outline-none"
+          minLength={6}
+          required
+        />
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-blue-500 text-white rounded-full"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
 }

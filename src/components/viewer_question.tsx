@@ -8,7 +8,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion.tsx";
 import ShortAnswerQuestion from "./ShortAnswerQuestion.tsx";
 import NumberQuestion from "./NumberQuestion.tsx";
 
-import { username } from "../utils.tsx";
+import { userState } from "../utils.tsx";
 
 // Three different question types
 // 1. Multiple choice
@@ -27,7 +27,7 @@ function ViewerQuestion() {
   const sendResponse = (response: string) => {
     console.log("Sending response:", response);
     const formData = new FormData();
-    formData.append("username", username);
+    formData.append("username", userState.username);
     formData.append("response", response);
 
     fetch(BACKEND + "/response", {
