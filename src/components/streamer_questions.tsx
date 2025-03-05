@@ -4,13 +4,14 @@ import { createRoot } from "react-dom/client";
 import { BACKEND, socket } from "../utils.tsx";
 
 import { Question } from "../interfaces/Question.tsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 console.log("Streamer websocket connected\n");
 
 function StreamerQuestions() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch all of the questions from the server
@@ -25,31 +26,14 @@ function StreamerQuestions() {
   const handleClick = (question: string) => {
     socket.emit("start_question", { question });
     // Render the Timer component
-    const timerContainer = document.getElementById("timer");
-    const root = createRoot(timerContainer!);
     const parsedQuestion = JSON.parse(question);
+    navigate("/timer", {
+      state: {
+        duration: parsedQuestion.time,
+        question_number: parsedQuestion.number,
+      },
+    });
     console.log(parsedQuestion);
-    root.render(
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100vw",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          zIndex: 9999,
-        }}
-      >
-        <Timer
-          duration={parsedQuestion.time}
-          question_number={parsedQuestion.number}
-          answer={parsedQuestion.answer}
-        />
-      </div>
-    );
   };
 
   return (
@@ -59,7 +43,6 @@ function StreamerQuestions() {
         justifyContent: "center",
         paddingTop: "5%",
       }}
-      id="timer"
       key={location.key}
     >
       <ul style={{ width: "50%" }}>

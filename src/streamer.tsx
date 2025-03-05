@@ -5,16 +5,35 @@ import "./index.css";
 
 import { SocketProvider } from "./utils";
 // Streamer side has routing
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import StreamerQuestions from "./components/streamer_questions";
 import StreamerResponses from "./components/streamer_responses";
 import StreamerLeaderboard from "./components/streamer_leaderboard";
+import Timer from "./components/timer";
+
+function AppRoutes() {
+  const location = useLocation();
+  console.log("Location changed:", location);
+
+  return (
+    <Routes key={location.key}>
+      <Route path="/" element={<StreamerQuestions />} />
+      <Route path="/responses" element={<StreamerResponses />} />
+      <Route path="/leaderboard" element={<StreamerLeaderboard />} />
+      <Route path="/timer" element={<Timer />} />
+    </Routes>
+  );
+}
 
 createRoot(document.getElementById("root")!).render(
   <SocketProvider>
     <Router>
-      {/* Cut responses because it should only be accessible after a question expires */}
-      {/* <Link to="/responses">Responses</Link> */}
       <nav
         style={{
           display: "flex",
@@ -44,11 +63,7 @@ createRoot(document.getElementById("root")!).render(
         </button>
       </nav>
 
-      <Routes>
-        <Route path="/" element={<StreamerQuestions />} />
-        <Route path="/responses" element={<StreamerResponses />} />
-        <Route path="/leaderboard" element={<StreamerLeaderboard />} />
-      </Routes>
+      <AppRoutes />
     </Router>
   </SocketProvider>
 );

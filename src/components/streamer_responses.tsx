@@ -30,12 +30,14 @@ function StreamerResponses() {
   const location = useLocation();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
-  // TODO: this is the wrong data for some reason (or the server isn't updating correctly)
   const data = location.state?.data;
 
   useEffect(() => {
-    console.log("useEffect streamer responses");
+    if (!data) return;
     const responses = data.responses;
+    if (!responses) return;
+    if (Object.keys(responses).length === 0) return;
+
     // correctAnswers is undefined?
     const correctAnswers = data.answer?.split(",");
     console.log(correctAnswers);
@@ -152,7 +154,27 @@ function StreamerResponses() {
         chartInstanceRef.current = null;
       }
     };
-  }, [data]);
+  }, [location]);
+
+  if (!data || Object.keys(data.responses).length == 0) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "80%",
+          display: "flex",
+          paddingTop: "10%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        key={location.key}
+      >
+        <p style={{ fontSize: "96px", fontWeight: "bold", color: "black" }}>
+          No responses available.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div

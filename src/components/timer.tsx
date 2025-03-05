@@ -1,28 +1,23 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import {
   useNavigate,
   BrowserRouter as Router,
-  redirect,
   useLocation,
 } from "react-router-dom";
 
 // import { socket } from "../utils";
 import { SocketContext } from "../utils";
 
-function TimerComponent({
-  duration,
-  question_number,
-  answer,
-}: {
-  duration: number;
-  question_number: number;
-  answer: string;
-}) {
+function TimerComponent() {
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const { duration, question_number } = location.state as {
+    duration: number;
+    question_number: number;
+  };
   const [timeLeft, setTimeLeft] = useState(duration);
-  let end_question_emitted = false;
+  const endQuestionEmitted = useRef(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -39,15 +34,11 @@ function TimerComponent({
           timerElement.parentElement
         );
       }
-      // Render the responses
-      // navigate(
-      //   `/responses?question_number=${question_number}&answer=${answer}`
-      // );
-      // navigate(0);
       // Emit the answer to the server
-      if (!end_question_emitted) {
+      if (!endQuestionEmitted.current) {
+        console.log("emitting end_question");
         socket.emit("end_question", { question_number });
-        end_question_emitted = true;
+        endQuestionEmitted.current = true;
       }
     } else {
       interval = setTimeout(() => {
@@ -62,13 +53,12 @@ function TimerComponent({
     socket.on("results", (data) => {
       console.log("results", data);
       navigate("/responses", { state: { data: data } });
-      // navigate(0);
     });
 
     return () => {
       socket.off("results");
     };
-  }, []);
+  }, [socket, navigate]);
 
   const minutes = Math.floor(timeLeft / 60)
     .toString()
@@ -85,23 +75,18 @@ function TimerComponent({
   );
 }
 
-function Timer({
-  duration,
-  question_number,
-  answer,
-}: {
-  duration: number;
-  question_number: number;
-  answer: string;
-}) {
+function Timer() {
   return (
-    <Router>
-      <TimerComponent
-        duration={duration}
-        question_number={question_number}
-        answer={answer}
-      />
-    </Router>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <TimerComponent />
+    </div>
   );
 }
 
