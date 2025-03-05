@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { username } from "../webhooks/onload.tsx";
 // Loaded after a viewer answers; timer will be displayed on streamers end
-import { BACKEND, socket } from "../utils.tsx";
+import { socket } from "../utils.tsx";
 
 function ViewerAnswered() {
   const navigate = useNavigate();
@@ -12,7 +11,7 @@ function ViewerAnswered() {
 
   React.useEffect(() => {
     console.log("useEffect viewer_answered with results calls");
-    socket.on("results", (data) => {
+    socket.on("results", () => {
       navigate("/answer", {
         state: {
           correct: question.answer

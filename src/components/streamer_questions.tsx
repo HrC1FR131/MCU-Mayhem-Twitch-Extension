@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Timer from "./timer";
-import { createRoot } from "react-dom/client";
+import { useEffect, useState } from "react";
 import { BACKEND, socket } from "../utils.tsx";
 
 import { Question } from "../interfaces/Question.tsx";

@@ -5,7 +5,6 @@ import { BACKEND } from "../utils.tsx";
 import { SocketContext } from "../utils.tsx";
 import { Player } from "../interfaces/Player.tsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { addUser } from "../webhooks/onload.tsx";
 
 // addUser(); // Add user to database; will be replaced with Twitch API
 

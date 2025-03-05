@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { Question } from "../interfaces/Question";
 import { QuestionProps } from "../interfaces/QuestionProps";
 
 function NumberQuestion({ question, sendResponse }: QuestionProps) {

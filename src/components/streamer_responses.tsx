@@ -1,10 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import { BACKEND, socket } from "../utils.tsx";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 // For bar and pie charts
 import { Chart } from "chart.js/auto";
-import { CategoryScale, ChartConfiguration } from "chart.js";
 import "chart.js/auto";
 import { WordCloudController, WordElement } from "chartjs-chart-wordcloud";
 // For word clouds

@@ -1,9 +1,5 @@
 import { useState, useEffect, useContext, useRef } from "react";
-import {
-  useNavigate,
-  BrowserRouter as Router,
-  useLocation,
-} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // import { socket } from "../utils";
 import { SocketContext } from "../utils";

@@ -1,6 +1,3 @@
-import React from "react";
-
-import { Question } from "../interfaces/Question";
 import { QuestionProps } from "../interfaces/QuestionProps";
 
 function MultipleChoiceQuestion({ question, sendResponse }: QuestionProps) {

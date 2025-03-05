@@ -1,8 +1,7 @@
 // For the viewer; answering quesstions, seeing ranking, or viewing escape room progress
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SocketProvider } from "./utils";
 
 import ViewerLeaderboard from "./components/viewer_leaderboard";

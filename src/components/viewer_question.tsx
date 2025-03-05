@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BACKEND, socket } from "../utils.tsx";
 import { useLocation } from "react-router-dom";
 
-import { Question } from "../interfaces/Question.tsx";
 import { useNavigate } from "react-router-dom";
 
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion.tsx";
@@ -38,7 +37,7 @@ function ViewerQuestion() {
       .then((res) => {
         return res.json();
       })
-      .then((data) => {
+      .then(() => {
         // console.log("Response submitted successfully");
         // console.log(data.results.responses);
         // console.log(data.results.question);
@@ -56,7 +55,7 @@ function ViewerQuestion() {
 
   useEffect(() => {
     console.log("useEffect viewer_question with results calls");
-    socket.on("results", (data) => {
+    socket.on("results", () => {
       navigate("/answer", {
         state: { correct: false },
       });
