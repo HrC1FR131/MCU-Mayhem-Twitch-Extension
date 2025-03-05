@@ -164,6 +164,7 @@ function StreamerResponses() {
         justifyContent: "center",
         alignItems: "center",
       }}
+      key={location.key}
     >
       <canvas
         ref={chartRef}

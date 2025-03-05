@@ -3,6 +3,7 @@ import {
   useNavigate,
   BrowserRouter as Router,
   redirect,
+  useLocation,
 } from "react-router-dom";
 
 // import { socket } from "../utils";
@@ -19,6 +20,7 @@ function TimerComponent({
 }) {
   const socket = useContext(SocketContext);
   const navigate = useNavigate();
+  const location = useLocation();
   const [timeLeft, setTimeLeft] = useState(duration);
   let end_question_emitted = false;
 
@@ -60,7 +62,7 @@ function TimerComponent({
     socket.on("results", (data) => {
       console.log("results", data);
       navigate("/responses", { state: { data: data } });
-      navigate(0);
+      // navigate(0);
     });
 
     return () => {
@@ -74,7 +76,10 @@ function TimerComponent({
   const seconds = (timeLeft % 60).toString().padStart(2, "0");
 
   return (
-    <div style={{ fontSize: "96px", fontWeight: "bold", color: "black" }}>
+    <div
+      style={{ fontSize: "96px", fontWeight: "bold", color: "black" }}
+      key={location.key}
+    >
       {minutes}:{seconds}
     </div>
   );

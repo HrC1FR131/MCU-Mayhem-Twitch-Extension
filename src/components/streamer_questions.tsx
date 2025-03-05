@@ -4,11 +4,13 @@ import { createRoot } from "react-dom/client";
 import { BACKEND, socket } from "../utils.tsx";
 
 import { Question } from "../interfaces/Question.tsx";
+import { useLocation } from "react-router-dom";
 
 console.log("Streamer websocket connected\n");
 
 function StreamerQuestions() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const location = useLocation();
 
   useEffect(() => {
     // Fetch all of the questions from the server
@@ -58,6 +60,7 @@ function StreamerQuestions() {
         paddingTop: "5%",
       }}
       id="timer"
+      key={location.key}
     >
       <ul style={{ width: "50%" }}>
         {questions.map((q, index) => (

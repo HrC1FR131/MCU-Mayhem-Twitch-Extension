@@ -4,7 +4,7 @@ import { BACKEND } from "../utils.tsx";
 // import { socket } from "../utils.tsx";
 import { SocketContext } from "../utils.tsx";
 import { Player } from "../interfaces/Player.tsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { addUser } from "../webhooks/onload.tsx";
 
 // addUser(); // Add user to database; will be replaced with Twitch API
@@ -14,6 +14,7 @@ function ViewerLeaderboard() {
   const navigate = useNavigate();
   const [leaderboard, setLeaderboard] = useState<Player[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
 
   // Listen for new questions via WebSocket
   useEffect(() => {
@@ -21,7 +22,7 @@ function ViewerLeaderboard() {
       // Navigate to the question page
       console.log("New question received:", data);
       navigate("/question", { state: { question: data } });
-      navigate(0);
+      // navigate(0);
     });
 
     return () => {
@@ -43,7 +44,10 @@ function ViewerLeaderboard() {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen">
+    <div
+      className="flex flex-col items-center justify-center h-screen w-screen"
+      key={location.key}
+    >
       <input
         type="text"
         placeholder="Search by username"

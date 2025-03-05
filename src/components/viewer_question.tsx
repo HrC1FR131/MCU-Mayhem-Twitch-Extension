@@ -47,7 +47,7 @@ function ViewerQuestion() {
         navigate("/answered", {
           state: { response: response, question: question },
         });
-        navigate(0);
+        // navigate(0);
       })
       .catch((error) => {
         console.error("Error submitting response:", error);
@@ -60,7 +60,7 @@ function ViewerQuestion() {
       navigate("/answer", {
         state: { correct: false },
       });
-      navigate(0);
+      // navigate(0);
     });
 
     return () => {
@@ -69,7 +69,10 @@ function ViewerQuestion() {
   }, [navigate]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen">
+    <div
+      className="flex flex-col items-center justify-center h-screen w-screen"
+      key={location.key}
+    >
       {question ? (
         question.question_type === "multiple_choice" ||
         question.question_type === "this_or_that" ? (

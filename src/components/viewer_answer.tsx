@@ -24,6 +24,7 @@ function ViewerAnswer() {
     <div
       className="flex items-center justify-center h-screen w-screen"
       style={{ backgroundColor: "green" }}
+      key={location.key}
     >
       <i className="fas fa-check text-white text-6xl"></i>
     </div>

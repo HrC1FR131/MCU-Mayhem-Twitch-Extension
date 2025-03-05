@@ -5,10 +5,12 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 import { Player } from "../interfaces/Player.tsx";
+import { useLocation } from "react-router-dom";
 
 function StreamerLeaderboard() {
   const [leaderboard, setLeaderboard] = useState<Player[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     fetch(BACKEND + "/leaderboard")
@@ -37,7 +39,10 @@ function StreamerLeaderboard() {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen">
+    <div
+      className="flex flex-col items-center justify-center h-screen w-screen"
+      key={location.key}
+    >
       <input
         type="text"
         placeholder="Search by username"

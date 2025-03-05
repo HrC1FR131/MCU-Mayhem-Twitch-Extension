@@ -21,7 +21,7 @@ function ViewerAnswered() {
             .includes(response.toLowerCase()),
         },
       });
-      navigate(0);
+      // navigate(0);
     });
 
     return () => {
@@ -30,7 +30,10 @@ function ViewerAnswered() {
   }, [navigate, question, response]);
 
   return (
-    <div className="bg-gray-200 h-screen w-screen flex flex-col items-center justify-center">
+    <div
+      className="bg-gray-200 h-screen w-screen flex flex-col items-center justify-center"
+      key={location.key}
+    >
       <h1 className="text-2xl font-bold mb-4">Good answer?</h1>
       <div className="w-12 h-12 border-4 border-t-4 border-t-purple-500 border-purple-300 rounded-full mt-4 animate-spin"></div>
     </div>
