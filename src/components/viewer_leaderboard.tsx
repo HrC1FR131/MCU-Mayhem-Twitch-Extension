@@ -69,6 +69,11 @@ function ViewerLeaderboard() {
       </div>
     </div>
   );
+  {
+    !searchTerm && (
+      <div className="text-2xl font-bold mt-4">Your first question</div>
+    );
+  }
 }
 
 export default ViewerLeaderboard;

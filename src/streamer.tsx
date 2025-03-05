@@ -23,6 +23,8 @@ function AppRoutes() {
   return (
     <Routes key={location.key}>
       <Route path="/" element={<StreamerQuestions />} />
+      {/* The below line is just for localhost testing */}
+      <Route path="/streamer.html" element={<StreamerQuestions />} />
       <Route path="/responses" element={<StreamerResponses />} />
       <Route path="/leaderboard" element={<StreamerLeaderboard />} />
       <Route path="/timer" element={<Timer />} />

@@ -14,6 +14,8 @@ createRoot(document.getElementById("root")!).render(
     <Router>
       <Routes>
         <Route path="/" element={<ViewerLeaderboard />} />
+        {/* The below line is just for localhost testing */}
+        <Route path="/viewer.html" element={<ViewerLeaderboard />} />
         <Route path="/question" element={<ViewerQuestion />} />
         <Route path="/answered" element={<ViewerAnswered />} />
         <Route path="/answer" element={<ViewerAnswer />} />

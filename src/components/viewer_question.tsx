@@ -8,7 +8,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion.tsx";
 import ShortAnswerQuestion from "./ShortAnswerQuestion.tsx";
 import NumberQuestion from "./NumberQuestion.tsx";
 
-import { username } from "../webhooks/onload.tsx";
+import { username } from "../utils.tsx";
 
 // Three different question types
 // 1. Multiple choice
@@ -17,6 +17,26 @@ import { username } from "../webhooks/onload.tsx";
 
 // Next step is to set up the actual twitch extension api hooks; i.e.
 // - When people join stream, create a user account, and set the player username variable locally for access across the application
+
+function createUserAccount(name: string) {
+  const formData = new FormData();
+  formData.append("username", name);
+
+  fetch(BACKEND + "/create_player", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => {
+      if (response.ok) {
+        console.log("User account created successfully");
+      } else {
+        console.error("Error creating user account:", response.statusText);
+      }
+    })
+    .catch((err) => {
+      console.error("Error sending data to backend:", err);
+    });
+}
 
 function ViewerQuestion() {
   const navigate = useNavigate();
@@ -67,7 +87,7 @@ function ViewerQuestion() {
     };
   }, [navigate]);
 
-  return (
+  return username != undefined ? (
     <div
       className="flex flex-col items-center justify-center h-screen w-screen"
       key={location.key}
@@ -92,6 +112,21 @@ function ViewerQuestion() {
       ) : (
         <p className="text-2xl font-bold">Waiting for a question...</p>
       )}
+    </div>
+  ) : (
+    <div
+      className="flex flex-col items-center justify-center h-screen w-screen"
+      key={location.key}
+    >
+      <p className="text-4xl font-bold">Your first question</p>
+      <input
+        type="text"
+        placeholder="Enter a username"
+        className="w-64 px-4 py-2 mb-4 rounded-full border border-gray-300 focus:outline-none"
+        onChange={(e) => {
+          createUserAccount(e.target.value);
+        }}
+      />
     </div>
   );
 }
