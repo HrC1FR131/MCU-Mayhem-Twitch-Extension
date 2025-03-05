@@ -48,6 +48,7 @@ window.Twitch.ext.onAuthorized(function (auth: Auth) {
       "Client-ID": clientId!,
       Authorization: `Bearer ${oauthToken}`,
     },
+    mode: "cors",
   })
     .then((response) => response.json())
     .then((data) => {

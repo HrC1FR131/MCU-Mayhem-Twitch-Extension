@@ -26,6 +26,7 @@
 ## LOCAL TESTING
 
 - https://dev.twitch.tv/docs/extensions/life-cycle/
+- Need to make sure localhost port and twitch port match
 
 ## GUIDELINES
 
