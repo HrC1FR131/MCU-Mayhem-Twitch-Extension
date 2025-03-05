@@ -5,6 +5,7 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
     <p>
       Wow look at all these great config options that I definitely implemented
     </p>

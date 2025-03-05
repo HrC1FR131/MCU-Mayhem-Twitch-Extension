@@ -11,6 +11,7 @@ import ViewerAnswer from "./components/viewer_answer";
 
 createRoot(document.getElementById("root")!).render(
   <SocketProvider>
+    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
     <Router>
       <Routes>
         <Route path="/" element={<ViewerLeaderboard />} />
