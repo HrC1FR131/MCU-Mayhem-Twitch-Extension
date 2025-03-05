@@ -1,33 +1,87 @@
-// // On loading of the extension, get the user's username and store the info in the database
-// window.Twitch.ext.onAuthorized(function (auth) {
-//   console.log("The JWT that will be passed to the EBS is", auth.token);
-//   console.log("The channel ID is", auth.channelId);
-// });
-
 import { BACKEND } from "../utils";
+// import dotenv from "dotenv";
+// dotenv.config({ path: "../../.env" });
+declare global {
+  interface Window {
+    Twitch: any;
+  }
+}
 
-// // Get username from user id
-// getUsername;
+export let username: string;
 
-// I need to write a bypass;
-// something where the user's username will still get added to the database and the connection will be made
-// even if a twitch connection doesn't occur
-export let username: string = "Player1";
-export function addUser() {
-  username = "user" + Math.floor(Math.random() * 10000).toString();
-  console.log("Adding user:", username);
+// On loading of the extension, get the user's username and store the info in the database
+// Can run at any time during the application
+interface Auth {
+  token: string;
+  channelId: string;
+  clientId: string;
+  userId: string;
+}
+
+function createUserAccount(name: string) {
   const formData = new FormData();
-  formData.append("username", username);
+  formData.append("username", name);
 
   fetch(BACKEND + "/create_player", {
     method: "POST",
     body: formData,
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("User added:", data);
+    .then((response) => {
+      if (response.ok) {
+        console.log("User account created successfully");
+      } else {
+        console.error("Error creating user account:", response.statusText);
+      }
     })
-    .catch((error) => {
-      console.error("Error adding user:", error);
+    .catch((err) => {
+      console.error("Error sending data to backend:", err);
     });
 }
+
+window.Twitch.ext.onAuthorized(function (auth: Auth) {
+  const oauthToken = auth.token;
+
+  const clientId = import.meta.env.VITE_TWITCH_CLIENT_ID; // Replace with your Twitch client ID
+  fetch("https://api.twitch.tv/helix/users", {
+    method: "GET",
+    headers: {
+      "Client-ID": clientId!,
+      Authorization: `Bearer ${oauthToken}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.data && data.data.length > 0) {
+        const username = data.data[0].login; // Twitch username
+        console.log("Fetched username:", username);
+
+        // Send the username to your backend to create the user account
+        createUserAccount(username);
+      } else {
+        console.error("Error fetching Twitch user data:", data);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching user info:", err);
+    });
+});
+
+// testing bypass function
+// export function addUser() {
+//   username = "user" + Math.floor(Math.random() * 10000).toString();
+//   console.log("Adding user:", username);
+//   const formData = new FormData();
+//   formData.append("username", username);
+
+//   fetch(BACKEND + "/create_player", {
+//     method: "POST",
+//     body: formData,
+//   })
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("User added:", data);
+//     })
+//     .catch((error) => {
+//       console.error("Error adding user:", error);
+//     });
+// }
