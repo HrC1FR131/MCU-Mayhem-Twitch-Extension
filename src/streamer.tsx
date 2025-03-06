@@ -31,41 +31,49 @@ function AppRoutes() {
     </Routes>
   );
 }
-
-createRoot(document.getElementById("root")!).render(
-  <SocketProvider>
-    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-    <Router>
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginBottom: "20px",
-          position: "fixed",
-          top: 0,
-          width: "100%",
-          backgroundColor: "white",
-          zIndex: 1000,
-          padding: "10px 0",
-          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <button style={{ margin: "0 10px" }}>
-          <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-            Questions
-          </Link>
-        </button>
-        <button style={{ margin: "0 10px" }}>
-          <Link
-            to="/leaderboard"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            Leaderboard
-          </Link>
-        </button>
-      </nav>
-
-      <AppRoutes />
-    </Router>
-  </SocketProvider>
-);
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Streamer loaded");
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    console.log("#root element is present:", rootElement);
+  } else {
+    console.error("Error: #root element is missing!");
+  }
+  createRoot(document.getElementById("root")!).render(
+    <SocketProvider>
+      <Router>
+        <nav
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+            position: "fixed",
+            top: 0,
+            width: "100%",
+            backgroundColor: "white",
+            zIndex: 1000,
+            padding: "10px 0",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <button style={{ margin: "0 10px" }}>
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              Questions
+            </Link>
+          </button>
+          <button style={{ margin: "0 10px" }}>
+            <Link
+              to="/leaderboard"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Leaderboard
+            </Link>
+          </button>
+        </nav>
+        {/* Load the streamer questions by default */}
+        <StreamerQuestions />
+        <AppRoutes />
+      </Router>
+    </SocketProvider>
+  );
+});

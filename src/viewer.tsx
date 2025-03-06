@@ -9,18 +9,28 @@ import ViewerQuestion from "./components/viewer_question";
 import ViewerAnswered from "./components/viewer_answered";
 import ViewerAnswer from "./components/viewer_answer";
 
-createRoot(document.getElementById("root")!).render(
-  <SocketProvider>
-    <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-    <Router>
-      <Routes>
-        <Route path="/" element={<ViewerLeaderboard />} />
-        {/* The below line is just for localhost testing */}
-        <Route path="/viewer.html" element={<ViewerLeaderboard />} />
-        <Route path="/question" element={<ViewerQuestion />} />
-        <Route path="/answered" element={<ViewerAnswered />} />
-        <Route path="/answer" element={<ViewerAnswer />} />
-      </Routes>
-    </Router>
-  </SocketProvider>
-);
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Viewer loaded");
+  const rootElement = document.getElementById("root");
+  if (rootElement) {
+    console.log("#root element is present:", rootElement);
+  } else {
+    console.error("Error: #root element is missing!");
+  }
+  createRoot(document.getElementById("root")!).render(
+    <SocketProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<ViewerLeaderboard />} />
+          {/* The below line is just for localhost testing */}
+          <Route path="/viewer.html" element={<ViewerLeaderboard />} />
+          <Route path="/question" element={<ViewerQuestion />} />
+          <Route path="/answered" element={<ViewerAnswered />} />
+          <Route path="/answer" element={<ViewerAnswer />} />
+        </Routes>
+        {/* Load the viewer leaderboard by default */}
+        <ViewerLeaderboard />
+      </Router>
+    </SocketProvider>
+  );
+});
